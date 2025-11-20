@@ -3,342 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>柴桑区第二小学签到系统</title>
+    <title>柴桑二小签到系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: "Microsoft YaHei", sans-serif; 
         }
         
-        body {
-            background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
-            color: #333;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        body { 
+            background: #1e5799; 
+            padding: 20px; 
+            min-height: 100vh; 
         }
         
-        .container {
-            width: 100%;
-            max-width: 360px;
-            min-height: 640px;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            flex-direction: column;
+        .container { 
+            max-width: 400px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 15px; 
+            overflow: hidden; 
         }
         
-        .header {
-            background-color: #1e5799;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            position: relative;
+        .header { 
+            background: #1e5799; 
+            color: white; 
+            padding: 25px; 
+            text-align: center; 
         }
         
-        .school-logo {
-            width: 80px;
-            height: 80px;
-            background-color: white;
-            border-radius: 50%;
-            margin: 0 auto 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 12px;
-            color: #1e5799;
-            font-weight: bold;
+        .school-logo { 
+            width: 60px; 
+            height: 60px; 
+            background: white; 
+            border-radius: 50%; 
+            margin: 0 auto 10px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 12px; 
+            color: #1e5799; 
+            font-weight: bold; 
         }
         
-        .header h1 {
-            font-size: 20px;
-            margin-bottom: 5px;
+        .content { 
+            padding: 25px; 
         }
         
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
+        .event-info { 
+            background: #f0f7ff; 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-bottom: 20px; 
+            border-left: 4px solid #1e5799; 
         }
         
-        .content {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
+        .form-group { 
+            margin-bottom: 20px; 
         }
         
-        .event-info {
-            background-color: #f5f9ff;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-left: 4px solid #1e5799;
+        .form-group label { 
+            display: block; 
+            margin-bottom: 8px; 
+            color: #333; 
+            font-weight: bold; 
         }
         
-        .event-info h2 {
-            font-size: 18px;
-            color: #1e5799;
-            margin-bottom: 5px;
+        .form-group input, 
+        .form-group select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #ddd; 
+            border-radius: 8px; 
+            font-size: 16px; 
         }
         
-        .event-info p {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .signin-form {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: #555;
-        }
-        
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-        
-        .form-group small {
-            display: block;
-            margin-top: 5px;
-            color: #666;
-            font-size: 12px;
-        }
-        
-        .btn {
-            background-color: #1e5799;
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .btn { 
+            background: #1e5799; 
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            width: 100%; 
+            cursor: pointer; 
             margin-top: 10px;
         }
         
-        .btn:hover {
-            background-color: #16457a;
+        .btn-admin { 
+            background: #28a745; 
         }
         
-        .btn-secondary {
-            background-color: #6c757d;
+        .btn-secondary { 
+            background: #6c757d; 
         }
         
-        .btn-secondary:hover {
-            background-color: #5a6268;
+        .result { 
+            margin-top: 15px; 
+            padding: 12px; 
+            border-radius: 6px; 
+            text-align: center; 
+            display: none; 
         }
         
-        .btn-admin {
-            background-color: #28a745;
-            margin-top: 5px;
+        .success { 
+            background: #d4edda; 
+            color: #155724; 
         }
         
-        .btn-admin:hover {
-            background-color: #218838;
+        .error { 
+            background: #f8d7da; 
+            color: #721c24; 
         }
         
-        .signin-result {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            display: none;
+        .admin-panel { 
+            display: none; 
+            margin-top: 20px; 
+            padding: 20px; 
+            background: #f8f9fa; 
+            border-radius: 10px; 
         }
         
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .footer { 
+            text-align: center; 
+            padding: 15px; 
+            background: #f8f9fa; 
+            color: #666; 
+            font-size: 12px; 
         }
         
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .stats { 
+            display: flex; 
+            justify-content: space-between; 
+            margin: 20px 0; 
+            padding: 15px; 
+            background: white; 
+            border-radius: 10px; 
         }
         
-        .admin-panel {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
+        .stat-item { 
+            text-align: center; 
+            flex: 1; 
         }
         
-        .admin-panel h3 {
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: #555;
+        .stat-value { 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: #1e5799; 
         }
         
-        .footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 12px;
-            color: #888;
-            background-color: #f8f9fa;
+        .stat-label { 
+            font-size: 12px; 
+            color: #666; 
+            margin-top: 5px; 
         }
         
-        .tabs {
-            display: flex;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #ddd;
+        .qrcode-section { 
+            text-align: center; 
+            margin: 20px 0; 
+            padding: 20px; 
+            background: white; 
+            border-radius: 10px; 
         }
         
-        .tab {
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 14px;
+        .qrcode-container { 
+            margin: 15px auto; 
+            padding: 15px; 
+            background: white; 
+            border-radius: 8px; 
+            display: inline-block; 
         }
         
-        .tab.active {
-            border-bottom: 2px solid #1e5799;
-            color: #1e5799;
-            font-weight: bold;
+        #qrcode { 
+            width: 200px; 
+            height: 200px; 
         }
         
-        .tab-content {
-            display: none;
+        .url-display { 
+            background: #f8f9fa; 
+            border: 1px solid #ddd; 
+            border-radius: 6px; 
+            padding: 12px; 
+            margin: 15px 0; 
+            font-size: 12px; 
+            word-break: break-all; 
         }
         
-        .tab-content.active {
-            display: block;
+        .setting-section { 
+            margin-bottom: 20px; 
+            padding: 15px; 
+            background: white; 
+            border-radius: 8px; 
         }
         
-        .location-info {
-            background-color: #e9f7fe;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 14px;
+        .current-location { 
+            background: #e8f4fe; 
+            padding: 10px; 
+            border-radius: 6px; 
+            margin-top: 10px; 
+            font-size: 12px; 
         }
         
-        .location-info i {
-            color: #1e5799;
-            margin-right: 5px;
-        }
-        
-        .qrcode-container {
-            text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-        }
-        
-        #qrcode {
-            display: inline-block;
-            margin: 10px auto;
-            padding: 10px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            width: 200px;
-            height: 200px;
-            border: 2px dashed #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 14px;
-            text-align: center;
-        }
-        
-        .qrcode-info {
-            font-size: 14px;
-            color: #666;
-            margin-top: 10px;
-        }
-        
-        .stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 18px;
-            font-weight: bold;
-            color: #1e5799;
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .admin-entry {
-            text-align: center;
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .setting-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .setting-section h4 {
-            margin-bottom: 10px;
-            color: #1e5799;
-            font-size: 14px;
-        }
-
-        .current-location {
-            background-color: #e9f7fe;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-size: 12px;
-        }
-
-        .deploy-info {
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            font-size: 12px;
-            color: #856404;
-        }
-
-        .deploy-info h4 {
-            margin-bottom: 8px;
-            color: #856404;
+        .time-info { 
+            background: #fff3cd; 
+            padding: 10px; 
+            border-radius: 6px; 
+            margin: 10px 0; 
+            font-size: 12px; 
         }
     </style>
 </head>
@@ -346,189 +219,168 @@
     <div class="container">
         <div class="header">
             <div class="school-logo">柴桑二小</div>
-            <h1>柴桑区第二小学</h1>
+            <h2>柴桑区第二小学</h2>
             <p>教师签到系统</p>
         </div>
         
         <div class="content">
-            <!-- 部署说明 -->
-            <div class="deploy-info" id="deploy-info">
-                <h4>📋 部署说明</h4>
-                <p>请将此文件上传到Web服务器，然后使用服务器地址生成二维码。</p>
-                <p>当前访问方式: <span id="access-method">本地文件</span></p>
+            <!-- 教师签到 -->
+            <div id="teacher-view">
+                <div class="event-info">
+                    <h3 id="event-title">教师培训活动</h3>
+                    <p id="event-time">2023年10月15日 上午9:00</p>
+                    <p id="event-place">柴桑区第二小学 多媒体教室</p>
+                    <div class="time-info" id="time-check">
+                        📅 正在检查签到时间...
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>教师姓名</label>
+                    <input type="text" id="teacher-name" placeholder="请输入姓名">
+                </div>
+                
+                <div class="form-group">
+                    <label>所在部门/年级</label>
+                    <select id="department">
+                        <option value="">请选择</option>
+                        <option value="语文组">语文组</option>
+                        <option value="数学组">数学组</option>
+                        <option value="英语组">英语组</option>
+                        <option value="综合组">综合组</option>
+                        <option value="一年级">一年级</option>
+                        <option value="二年级">二年级</option>
+                        <option value="三年级">三年级</option>
+                        <option value="四年级">四年级</option>
+                        <option value="五年级">五年级</option>
+                        <option value="六年级">六年级</option>
+                    </select>
+                </div>
+                
+                <button class="btn" id="signin-btn">立即签到</button>
+                <button class="btn btn-admin" id="admin-btn">管理员入口</button>
+                
+                <div class="result" id="result"></div>
+                
+                <!-- 签到统计 -->
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-teachers">0</div>
+                        <div class="stat-label">总人数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="signed-teachers">0</div>
+                        <div class="stat-label">已签到</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="signin-rate">0%</div>
+                        <div class="stat-label">签到率</div>
+                    </div>
+                </div>
             </div>
+            
+            <!-- 管理员 -->
+            <div id="admin-view" class="admin-panel">
+                <h3 style="text-align:center; margin-bottom:20px; color:#1e5799;">管理面板</h3>
+                
+                <div class="form-group">
+                    <label>活动名称</label>
+                    <input type="text" id="set-event-name" value="教师培训活动">
+                </div>
+                
+                <div class="form-group">
+                    <label>活动日期</label>
+                    <input type="date" id="set-event-date" value="2023-10-15">
+                </div>
+                
+                <div class="form-group">
+                    <label>活动开始时间</label>
+                    <input type="time" id="set-event-start-time" value="09:00">
+                </div>
+                
+                <div class="form-group">
+                    <label>活动地点</label>
+                    <input type="text" id="set-event-place" value="柴桑区第二小学 多媒体教室">
+                </div>
+                
+                <!-- 位置签到设置 -->
+                <div class="setting-section">
+                    <h4>📍 位置签到设置</h4>
+                    <div class="form-group">
+                        <label>签到范围 (米)</label>
+                        <input type="number" id="location-range" value="500" min="100" max="5000">
+                    </div>
+                    <div class="form-group">
+                        <label>当前位置坐标</label>
+                        <div class="current-location">
+                            <div>纬度: <span id="current-lat">正在获取...</span></div>
+                            <div>经度: <span id="current-lng">正在获取...</span></div>
+                        </div>
+                        <button class="btn btn-secondary" id="set-current-location">使用当前位置</button>
+                    </div>
+                    <div class="form-group">
+                        <label>目标纬度</label>
+                        <input type="number" id="target-lat" step="any" placeholder="例如: 29.123456">
+                    </div>
+                    <div class="form-group">
+                        <label>目标经度</label>
+                        <input type="number" id="target-lng" step="any" placeholder="例如: 115.123456">
+                    </div>
+                </div>
 
-            <div class="event-info">
-                <h2 id="event-title">教师培训活动</h2>
-                <p id="event-date">2023年10月15日 上午9:00</p>
-                <p id="event-location">柴桑区第二小学 多媒体教室</p>
-            </div>
-            
-            <!-- 教师端只显示签到标签 -->
-            <div class="tabs" id="teacher-tabs">
-                <div class="tab active" data-tab="signin">教师签到</div>
-            </div>
-            
-            <!-- 管理员端显示所有标签 -->
-            <div class="tabs hidden" id="admin-tabs">
-                <div class="tab active" data-tab="signin">教师签到</div>
-                <div class="tab" data-tab="qrcode">签到二维码</div>
-                <div class="tab" data-tab="admin">管理设置</div>
-            </div>
-            
-            <div class="tab-content active" id="signin-tab">
-                <div class="signin-form">
-                    <div class="location-info">
-                        <i>📍</i> <span id="location-status">正在获取位置信息...</span>
-                    </div>
-                    
+                <!-- WiFi签到设置 -->
+                <div class="setting-section">
+                    <h4>📶 WiFi签到设置</h4>
                     <div class="form-group">
-                        <label for="teacher-name">教师姓名</label>
-                        <input type="text" id="teacher-name" placeholder="请输入您的真实姓名">
+                        <label>WiFi名称 (SSID)</label>
+                        <input type="text" id="wifi-name" placeholder="例如: Chaisang-School">
                     </div>
-                    
                     <div class="form-group">
-                        <label for="department">所在部门/年级</label>
-                        <select id="department">
-                            <option value="">请选择</option>
-                            <option value="语文组">语文组</option>
-                            <option value="数学组">数学组</option>
-                            <option value="英语组">英语组</option>
-                            <option value="综合组">综合组</option>
-                            <option value="一年级">一年级</option>
-                            <option value="二年级">二年级</option>
-                            <option value="三年级">三年级</option>
-                            <option value="四年级">四年级</option>
-                            <option value="五年级">五年级</option>
-                            <option value="六年级">六年级</option>
+                        <label>WiFi BSSID (可选)</label>
+                        <input type="text" id="wifi-bssid" placeholder="例如: 00:11:22:33:44:55">
+                    </div>
+                </div>
+
+                <!-- 签到方式设置 -->
+                <div class="setting-section">
+                    <h4>⚙️ 签到方式设置</h4>
+                    <div class="form-group">
+                        <label>签到验证方式</label>
+                        <select id="signin-method">
+                            <option value="location">仅位置签到</option>
+                            <option value="wifi">仅WiFi签到</option>
+                            <option value="both">位置或WiFi均可</option>
+                            <option value="none">无需验证</option>
                         </select>
                     </div>
-                    
-                    <button class="btn" id="signin-btn">立即签到</button>
-                    
-                    <!-- 管理员入口按钮 -->
-                    <div class="admin-entry">
-                        <p>管理人员请点击下方按钮进入管理界面</p>
-                        <button class="btn btn-admin" id="admin-entry-btn">管理员入口</button>
-                    </div>
-                    
-                    <div class="signin-result" id="signin-result"></div>
                 </div>
-            </div>
-            
-            <div class="tab-content" id="qrcode-tab">
-                <div class="qrcode-container">
-                    <h3>扫码签到</h3>
-                    <div id="qrcode">
-                        请复制下方链接<br>使用二维码生成工具<br>生成二维码
-                    </div>
-                    <p class="qrcode-info">签到链接:</p>
-                    <input type="text" id="qrcode-url" readonly style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; background:#f8f9fa;">
-                    <button class="btn" id="copy-url" style="margin-top:10px;">复制链接</button>
-                    
-                    <div class="deploy-info" style="margin-top:15px;">
-                        <h4>💡 使用说明</h4>
-                        <p>1. 将此HTML文件上传到Web服务器</p>
-                        <p>2. 复制上方链接到二维码生成工具</p>
-                        <p>3. 教师扫描二维码即可签到</p>
-                    </div>
-                    
-                    <div class="stats">
-                        <div class="stat-item">
-                            <div class="stat-value" id="total-teachers">0</div>
-                            <div class="stat-label">总教师数</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="signed-teachers">0</div>
-                            <div class="stat-label">已签到</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="signin-rate">0%</div>
-                            <div class="stat-label">签到率</div>
-                        </div>
-                    </div>
+                
+                <div class="form-group">
+                    <label>教师名单（每行一个姓名）</label>
+                    <textarea id="teacher-list" rows="4" placeholder="张三&#10;李四&#10;王五"></textarea>
                 </div>
-            </div>
-            
-            <div class="tab-content" id="admin-tab">
-                <div class="admin-panel">
-                    <h3>活动设置</h3>
-                    <div class="form-group">
-                        <label for="event-name">活动名称</label>
-                        <input type="text" id="event-name" value="教师培训活动">
+                
+                <!-- 二维码生成部分 -->
+                <div class="qrcode-section">
+                    <h4>📱 签到二维码</h4>
+                    <div class="qrcode-container">
+                        <div id="qrcode"></div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="event-date-input">活动日期</label>
-                        <input type="date" id="event-date-input" value="2023-10-15">
+                    <div class="url-display">
+                        <strong>签到链接:</strong><br>
+                        <span id="current-url">正在生成...</span>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="event-location-input">活动地点</label>
-                        <input type="text" id="event-location-input" value="柴桑区第二小学 多媒体教室">
-                    </div>
-                    
-                    <div class="setting-section">
-                        <h4>位置签到设置</h4>
-                        <div class="form-group">
-                            <label for="location-range">签到范围 (米)</label>
-                            <input type="number" id="location-range" value="500" min="100" max="5000">
-                            <small>设置允许签到的最大距离范围</small>
-                        </div>
-                        <div class="form-group">
-                            <label>当前位置坐标</label>
-                            <div class="current-location">
-                                <div>纬度: <span id="current-lat">正在获取...</span></div>
-                                <div>经度: <span id="current-lng">正在获取...</span></div>
-                            </div>
-                            <button class="btn btn-secondary" id="set-current-location" style="margin-top:10px;">使用当前位置作为签到点</button>
-                        </div>
-                        <div class="form-group">
-                            <label for="target-lat">目标纬度</label>
-                            <input type="number" id="target-lat" step="any" placeholder="例如: 29.123456">
-                        </div>
-                        <div class="form-group">
-                            <label for="target-lng">目标经度</label>
-                            <input type="number" id="target-lng" step="any" placeholder="例如: 115.123456">
-                        </div>
-                    </div>
-
-                    <div class="setting-section">
-                        <h4>WiFi签到设置</h4>
-                        <div class="form-group">
-                            <label for="wifi-name">WiFi名称 (SSID)</label>
-                            <input type="text" id="wifi-name" placeholder="例如: Chaisang-School">
-                            <small>设置允许签到的WiFi网络名称</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="wifi-bssid">WiFi BSSID (可选)</label>
-                            <input type="text" id="wifi-bssid" placeholder="例如: 00:11:22:33:44:55">
-                            <small>WiFi的物理地址，更精确但非必需</small>
-                        </div>
-                    </div>
-
-                    <div class="setting-section">
-                        <h4>签到方式设置</h4>
-                        <div class="form-group">
-                            <label for="signin-method">签到验证方式</label>
-                            <select id="signin-method">
-                                <option value="location">仅位置签到</option>
-                                <option value="wifi">仅WiFi签到</option>
-                                <option value="both">位置或WiFi均可</option>
-                                <option value="none">无需验证</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="teacher-list">导入教师名单 (每行一个姓名)</label>
-                        <textarea id="teacher-list" rows="5" placeholder="张三&#10;李四&#10;王五"></textarea>
-                    </div>
-                    
-                    <button class="btn" id="save-settings">保存设置</button>
-                    <button class="btn btn-secondary" id="export-data">导出签到数据</button>
-                    <button class="btn btn-admin" id="exit-admin">退出管理员模式</button>
+                    <button class="btn" id="generate-qrcode">生成二维码</button>
+                    <button class="btn btn-secondary" id="copy-url">复制链接</button>
+                    <p style="font-size:12px; color:#666; margin-top:10px;">
+                        教师扫描上方二维码即可签到<br>
+                        建议保存二维码图片打印使用
+                    </p>
                 </div>
+                
+                <button class="btn" id="save-settings">保存设置</button>
+                <button class="btn" id="export-data">导出签到数据</button>
+                <button class="btn btn-admin" id="exit-admin">返回签到</button>
             </div>
         </div>
         
@@ -538,146 +390,91 @@
     </div>
 
     <script>
-        // 页面加载完成后执行
+        // 管理员密码
+        const ADMIN_PASSWORD = "13755262970";
+        
+        // 初始化系统
         document.addEventListener('DOMContentLoaded', function() {
-            // 检查访问方式
-            checkAccessMethod();
+            // 绑定事件
+            document.getElementById('signin-btn').addEventListener('click', signIn);
+            document.getElementById('admin-btn').addEventListener('click', showAdmin);
+            document.getElementById('exit-admin').addEventListener('click', showTeacher);
+            document.getElementById('save-settings').addEventListener('click', saveSettings);
+            document.getElementById('export-data').addEventListener('click', exportData);
+            document.getElementById('generate-qrcode').addEventListener('click', generateQRCode);
+            document.getElementById('copy-url').addEventListener('click', copyURL);
+            document.getElementById('set-current-location').addEventListener('click', setCurrentLocation);
             
-            // 检查是否为管理员模式
-            const isAdmin = localStorage.getItem('isAdmin') === 'true';
-            
-            if (isAdmin) {
-                showAdminInterface();
-            } else {
-                showTeacherInterface();
-            }
-            
-            // 获取用户位置
+            // 初始化功能
+            loadSettings();
+            updateStats();
+            checkSigninTime();
             getLocation();
             
-            // 更新统计数据
-            updateStats();
-            
-            // 生成二维码URL
-            generateQRCodeURL();
-            
-            // 设置标签切换
-            setupTabs();
-            
-            // 签到按钮点击事件
-            document.getElementById('signin-btn').addEventListener('click', function() {
-                handleSignin();
-            });
-            
-            // 保存设置
-            document.getElementById('save-settings').addEventListener('click', function() {
-                saveSettings();
-            });
-            
-            // 导出数据
-            document.getElementById('export-data').addEventListener('click', function() {
-                exportData();
-            });
-            
-            // 管理员入口按钮
-            document.getElementById('admin-entry-btn').addEventListener('click', function() {
-                enterAdminMode();
-            });
-            
-            // 退出管理员模式
-            document.getElementById('exit-admin').addEventListener('click', function() {
-                exitAdminMode();
-            });
-            
-            // 复制链接按钮
-            document.getElementById('copy-url').addEventListener('click', function() {
-                copyQRCodeURL();
-            });
-            
-            // 设置当前位置按钮
-            document.getElementById('set-current-location').addEventListener('click', function() {
-                setCurrentLocation();
-            });
-            
-            // 加载保存的设置
-            loadSettings();
+            // 每分钟检查一次签到时间
+            setInterval(checkSigninTime, 60000);
         });
-        
-        // 检查访问方式
-        function checkAccessMethod() {
-            const isLocalFile = window.location.protocol === 'file:';
-            const accessMethod = document.getElementById('access-method');
+
+        // 检查签到时间
+        function checkSigninTime() {
+            const eventSettings = getEventSettings();
+            const eventDate = eventSettings.date;
+            const eventTime = eventSettings.startTime || "09:00";
             
-            if (isLocalFile) {
-                accessMethod.textContent = '本地文件 (无法通过二维码访问)';
-                accessMethod.style.color = '#dc3545';
-                document.getElementById('deploy-info').style.display = 'block';
+            // 构建活动开始时间
+            const eventDateTime = new Date(`${eventDate}T${eventTime}:00`);
+            const now = new Date();
+            
+            // 计算时间差（分钟）
+            const timeDiff = (now - eventDateTime) / (1000 * 60);
+            
+            const timeCheck = document.getElementById('time-check');
+            const signinBtn = document.getElementById('signin-btn');
+            
+            if (timeDiff < 0) {
+                // 活动未开始
+                const minutesLeft = Math.abs(Math.floor(timeDiff));
+                timeCheck.innerHTML = `⏰ 活动尚未开始，还有 ${minutesLeft} 分钟`;
+                timeCheck.style.background = '#fff3cd';
+                signinBtn.disabled = true;
+                signinBtn.style.background = '#6c757d';
+            } else if (timeDiff <= 30) {
+                // 在30分钟内
+                const minutesLeft = 30 - Math.floor(timeDiff);
+                timeCheck.innerHTML = `✅ 可签到，剩余时间 ${minutesLeft} 分钟`;
+                timeCheck.style.background = '#d4edda';
+                signinBtn.disabled = false;
+                signinBtn.style.background = '#1e5799';
             } else {
-                accessMethod.textContent = 'Web服务器 (可通过二维码访问)';
-                accessMethod.style.color = '#28a745';
-                document.getElementById('deploy-info').style.display = 'none';
+                // 超过30分钟
+                timeCheck.innerHTML = '❌ 签到时间已过（超过30分钟）';
+                timeCheck.style.background = '#f8d7da';
+                signinBtn.disabled = true;
+                signinBtn.style.background = '#6c757d';
             }
         }
-        
+
         // 显示教师界面
-        function showTeacherInterface() {
-            document.getElementById('teacher-tabs').classList.remove('hidden');
-            document.getElementById('admin-tabs').classList.add('hidden');
-            document.querySelector('.admin-entry').classList.remove('hidden');
+        function showTeacher() {
+            document.getElementById('teacher-view').style.display = 'block';
+            document.getElementById('admin-view').style.display = 'none';
             localStorage.setItem('isAdmin', 'false');
+            checkSigninTime();
         }
         
         // 显示管理员界面
-        function showAdminInterface() {
-            document.getElementById('teacher-tabs').classList.add('hidden');
-            document.getElementById('admin-tabs').classList.remove('hidden');
-            document.querySelector('.admin-entry').classList.add('hidden');
-            localStorage.setItem('isAdmin', 'true');
-        }
-        
-        // 进入管理员模式
-        function enterAdminMode() {
-            const password = prompt('请输入管理员密码:');
-            if (password === '123456') {
-                showAdminInterface();
-                // 切换到二维码标签
-                document.querySelector('.tab[data-tab="qrcode"]').click();
+        function showAdmin() {
+            const password = prompt('请输入管理员密码：');
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('teacher-view').style.display = 'none';
+                document.getElementById('admin-view').style.display = 'block';
+                localStorage.setItem('isAdmin', 'true');
+                loadAdminSettings();
+                generateQRCode();
+                getLocation();
             } else {
                 alert('密码错误！');
             }
-        }
-        
-        // 退出管理员模式
-        function exitAdminMode() {
-            if (confirm('确定要退出管理员模式吗？')) {
-                showTeacherInterface();
-            }
-        }
-        
-        // 设置标签切换
-        function setupTabs() {
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    if (this.classList.contains('active')) return;
-                    
-                    // 移除所有active类
-                    tabs.forEach(t => t.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    
-                    // 添加active类到当前标签
-                    this.classList.add('active');
-                    const tabId = this.getAttribute('data-tab') + '-tab';
-                    document.getElementById(tabId).classList.add('active');
-                    
-                    // 如果是二维码标签，更新统计数据
-                    if (this.getAttribute('data-tab') === 'qrcode') {
-                        updateStats();
-                    }
-                });
-            });
         }
         
         // 获取地理位置
@@ -687,41 +484,14 @@
                     function(position) {
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
-                        document.getElementById('location-status').textContent = 
-                            `位置获取成功 (${lat.toFixed(6)}, ${lng.toFixed(6)})`;
                         // 更新管理员界面的当前位置显示
                         document.getElementById('current-lat').textContent = lat.toFixed(6);
                         document.getElementById('current-lng').textContent = lng.toFixed(6);
                     },
                     function(error) {
-                        document.getElementById('location-status').textContent = 
-                            '位置获取失败，请确保已授权位置权限';
+                        console.log('位置获取失败:', error);
                     }
                 );
-            } else {
-                document.getElementById('location-status').textContent = 
-                    '浏览器不支持地理位置功能';
-            }
-        }
-        
-        // 生成正确的二维码URL
-        function generateQRCodeURL() {
-            // 获取当前页面的完整URL
-            const currentUrl = window.location.href.split('?')[0]; // 移除参数
-            document.getElementById('qrcode-url').value = currentUrl;
-        }
-        
-        // 复制二维码链接
-        function copyQRCodeURL() {
-            const urlInput = document.getElementById('qrcode-url');
-            urlInput.select();
-            document.execCommand('copy');
-            
-            // 检查是否为本地文件
-            if (window.location.protocol === 'file:') {
-                alert('链接已复制！但当前为本地文件，请将此HTML文件上传到Web服务器后再生成二维码。');
-            } else {
-                alert('链接已复制到剪贴板！请使用二维码生成工具生成二维码。');
             }
         }
         
@@ -733,52 +503,112 @@
             if (currentLat !== '正在获取...' && currentLng !== '正在获取...') {
                 document.getElementById('target-lat').value = currentLat;
                 document.getElementById('target-lng').value = currentLng;
-                alert('当前位置已设置为签到点！');
+                showResult('当前位置已设置为签到点！', 'success');
             } else {
-                alert('请等待位置信息获取完成后再设置。');
+                showResult('请等待位置信息获取完成后再设置。', 'error');
             }
         }
         
-        // 更新统计数据
-        function updateStats() {
-            // 获取教师名单
-            const teacherList = localStorage.getItem('teacherList');
-            const teachers = teacherList ? teacherList.split('\n').filter(name => name.trim() !== '') : [];
-            
-            // 获取签到数据
-            const signinData = JSON.parse(localStorage.getItem('signinData') || '[]');
-            const signedTeachers = [...new Set(signinData.map(item => item.name))]; // 去重
-            
-            // 更新统计信息
-            document.getElementById('total-teachers').textContent = teachers.length || 0;
-            document.getElementById('signed-teachers').textContent = signedTeachers.length;
-            
-            // 计算签到率
-            const rate = teachers.length > 0 ? Math.round((signedTeachers.length / teachers.length) * 100) : 0;
-            document.getElementById('signin-rate').textContent = rate + '%';
+        // 生成二维码
+        function generateQRCode() {
+            try {
+                // 获取当前页面URL（不带参数）
+                const currentUrl = window.location.origin + window.location.pathname;
+                document.getElementById('current-url').textContent = currentUrl;
+                
+                // 清空之前的二维码
+                document.getElementById('qrcode').innerHTML = '';
+                
+                // 生成新的二维码
+                QRCode.toCanvas(document.getElementById('qrcode'), currentUrl, 
+                    {
+                        width: 200,
+                        height: 200,
+                        margin: 1,
+                        color: {
+                            dark: '#1e5799',
+                            light: '#ffffff'
+                        }
+                    }, 
+                    function(error) {
+                        if (error) {
+                            console.error('二维码生成失败:', error);
+                            document.getElementById('qrcode').innerHTML = 
+                                '<div style="color:red; text-align:center; padding:20px;">二维码生成失败<br>请刷新页面重试</div>';
+                        } else {
+                            showResult('二维码生成成功！', 'success');
+                        }
+                    }
+                );
+            } catch (error) {
+                console.error('二维码生成错误:', error);
+                document.getElementById('qrcode').innerHTML = 
+                    '<div style="color:red; text-align:center; padding:20px;">二维码功能加载中<br>请稍后重试</div>';
+            }
         }
         
-        // 处理签到
-        function handleSignin() {
-            const teacherName = document.getElementById('teacher-name').value.trim();
-            const department = document.getElementById('department').value;
+        // 复制链接
+        function copyURL() {
+            const url = document.getElementById('current-url').textContent;
+            navigator.clipboard.writeText(url).then(function() {
+                showResult('链接已复制到剪贴板！', 'success');
+            }).catch(function() {
+                // 备用方案
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showResult('链接已复制到剪贴板！', 'success');
+            });
+        }
+        
+        // 签到功能
+        function signIn() {
+            // 检查签到时间
+            const eventSettings = getEventSettings();
+            const eventDateTime = new Date(`${eventSettings.date}T${eventSettings.startTime || "09:00"}:00`);
+            const now = new Date();
+            const timeDiff = (now - eventDateTime) / (1000 * 60);
             
-            if (!teacherName) {
-                showResult('请输入您的姓名', 'error');
+            if (timeDiff > 30) {
+                showResult('签到时间已过（超过30分钟）', 'error');
                 return;
             }
             
-            if (!department) {
-                showResult('请选择您所在的部门/年级', 'error');
+            const name = document.getElementById('teacher-name').value.trim();
+            const dept = document.getElementById('department').value;
+            
+            if (!name) {
+                showResult('请输入姓名', 'error');
+                return;
+            }
+            
+            if (!dept) {
+                showResult('请选择部门/年级', 'error');
+                return;
+            }
+            
+            // 检查是否重复签到
+            const signData = getSignData();
+            const today = new Date().toDateString();
+            const hasSignedToday = signData.some(item => 
+                item.name === name && 
+                new Date(item.time).toDateString() === today
+            );
+            
+            if (hasSignedToday) {
+                showResult(`${name}老师，您今天已经签到过了！`, 'error');
                 return;
             }
             
             // 检查教师名单
             const teacherList = localStorage.getItem('teacherList');
             if (teacherList) {
-                const teachers = teacherList.split('\n').map(name => name.trim());
-                if (!teachers.includes(teacherName)) {
-                    showResult('姓名不在教师名单中，请联系管理员', 'error');
+                const teachers = teacherList.split('\n').map(t => t.trim());
+                if (!teachers.includes(name)) {
+                    showResult('姓名不在教师名单中', 'error');
                     return;
                 }
             }
@@ -796,9 +626,8 @@
                     // 位置验证
                     const locationSettings = JSON.parse(localStorage.getItem('locationSettings') || '{}');
                     if (locationSettings.targetLat && locationSettings.targetLng) {
-                        // 这里应该进行实际的位置距离计算
-                        // 模拟验证
-                        if (Math.random() > 0.3) { // 70%通过率模拟
+                        // 模拟位置验证
+                        if (Math.random() > 0.2) {
                             isValid = true;
                         } else {
                             errorMessage += '不在签到范围内；';
@@ -810,9 +639,8 @@
                     // WiFi验证
                     const wifiSettings = JSON.parse(localStorage.getItem('wifiSettings') || '{}');
                     if (wifiSettings.wifiName) {
-                        // 这里应该进行实际的WiFi验证
-                        // 模拟验证
-                        if (Math.random() > 0.3) { // 70%通过率模拟
+                        // 模拟WiFi验证
+                        if (Math.random() > 0.2) {
                             isValid = true;
                         } else {
                             errorMessage += '未连接到指定WiFi；';
@@ -822,68 +650,59 @@
             }
             
             if (isValid) {
-                showResult(`签到成功！<br>${teacherName}老师，欢迎参加活动！`, 'success');
+                // 获取当前活动信息
+                const eventSettings = getEventSettings();
                 
-                // 记录签到数据
-                const signinData = {
-                    name: teacherName,
-                    department: department,
-                    time: new Date().toLocaleString(),
-                    location: document.getElementById('location-status').textContent,
-                    method: signinMethod
+                // 保存签到记录
+                const signRecord = {
+                    name: name,
+                    department: dept,
+                    time: new Date().toLocaleString('zh-CN'),
+                    event: eventSettings.name,
+                    date: eventSettings.date,
+                    location: eventSettings.location,
+                    timestamp: new Date().getTime(),
+                    signinMethod: signinMethod
                 };
                 
-                saveSigninData(signinData);
-                
-                // 清空表单
+                saveSignData(signRecord);
+                showResult(`${name}老师签到成功！`, 'success');
                 document.getElementById('teacher-name').value = '';
                 document.getElementById('department').value = '';
-                
-                // 更新统计数据
                 updateStats();
             } else {
                 showResult(errorMessage, 'error');
             }
         }
         
-        // 显示签到结果
+        // 显示结果
         function showResult(message, type) {
-            const resultDiv = document.getElementById('signin-result');
-            resultDiv.innerHTML = message;
-            resultDiv.className = 'signin-result ' + type;
-            resultDiv.style.display = 'block';
-            
-            // 3秒后自动隐藏
-            setTimeout(function() {
-                resultDiv.style.display = 'none';
+            const result = document.getElementById('result');
+            result.textContent = message;
+            result.className = `result ${type}`;
+            result.style.display = 'block';
+            setTimeout(() => {
+                result.style.display = 'none';
             }, 3000);
-        }
-        
-        // 保存签到数据到本地存储
-        function saveSigninData(data) {
-            let signinData = JSON.parse(localStorage.getItem('signinData') || '[]');
-            signinData.push(data);
-            localStorage.setItem('signinData', JSON.stringify(signinData));
         }
         
         // 保存设置
         function saveSettings() {
-            const eventName = document.getElementById('event-name').value;
-            const eventDate = document.getElementById('event-date-input').value;
-            const eventLocation = document.getElementById('event-location-input').value;
-            
-            // 更新活动信息
-            document.getElementById('event-title').textContent = eventName;
-            document.getElementById('event-date').textContent = formatDate(eventDate);
-            document.getElementById('event-location').textContent = eventLocation;
+            const eventName = document.getElementById('set-event-name').value;
+            const eventDate = document.getElementById('set-event-date').value;
+            const eventStartTime = document.getElementById('set-event-start-time').value;
+            const eventPlace = document.getElementById('set-event-place').value;
+            const teacherList = document.getElementById('teacher-list').value;
             
             // 保存活动设置
-            const settings = {
+            const eventSettings = {
                 name: eventName,
                 date: eventDate,
-                location: eventLocation
+                startTime: eventStartTime,
+                location: eventPlace,
+                lastModified: new Date().getTime()
             };
-            localStorage.setItem('eventSettings', JSON.stringify(settings));
+            localStorage.setItem('eventSettings', JSON.stringify(eventSettings));
             
             // 保存位置设置
             const locationSettings = {
@@ -905,95 +724,131 @@
             localStorage.setItem('signinMethod', signinMethod);
             
             // 保存教师名单
-            const teacherList = document.getElementById('teacher-list').value;
-            if (teacherList) {
-                localStorage.setItem('teacherList', teacherList);
-            }
+            localStorage.setItem('teacherList', teacherList);
             
-            // 更新统计数据
-            updateStats();
-            
+            // 更新显示
+            updateEventDisplay(eventSettings);
             showResult('设置已保存！', 'success');
+            updateStats();
+            checkSigninTime();
+            
+            // 重新生成二维码
+            generateQRCode();
         }
         
-        // 导出数据
-        function exportData() {
-            const data = localStorage.getItem('signinData');
-            if (!data) {
-                showResult('暂无签到数据可导出', 'error');
-                return;
-            }
-            
-            // 创建下载链接
-            const blob = new Blob([data], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = '签到数据_' + new Date().toISOString().split('T')[0] + '.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showResult('数据导出成功！', 'success');
-        }
-        
-        // 加载保存的设置
+        // 加载设置
         function loadSettings() {
-            // 加载教师名单
+            const eventSettings = getEventSettings();
+            updateEventDisplay(eventSettings);
+        }
+        
+        // 加载管理员设置
+        function loadAdminSettings() {
+            const eventSettings = getEventSettings();
+            document.getElementById('set-event-name').value = eventSettings.name;
+            document.getElementById('set-event-date').value = eventSettings.date;
+            document.getElementById('set-event-start-time').value = eventSettings.startTime || "09:00";
+            document.getElementById('set-event-place').value = eventSettings.location;
+            
             const teacherList = localStorage.getItem('teacherList');
             if (teacherList) {
                 document.getElementById('teacher-list').value = teacherList;
             }
             
-            // 加载活动设置
-            const eventSettings = localStorage.getItem('eventSettings');
-            if (eventSettings) {
-                const settings = JSON.parse(eventSettings);
-                document.getElementById('event-name').value = settings.name || '';
-                document.getElementById('event-date-input').value = settings.date || '';
-                document.getElementById('event-location-input').value = settings.location || '';
-                
-                // 更新活动信息显示
-                document.getElementById('event-title').textContent = settings.name || '教师培训活动';
-                document.getElementById('event-date').textContent = formatDate(settings.date) || '2023年10月15日 上午9:00';
-                document.getElementById('event-location').textContent = settings.location || '柴桑区第二小学 多媒体教室';
-            }
-            
             // 加载位置设置
-            const locationSettings = localStorage.getItem('locationSettings');
-            if (locationSettings) {
-                const settings = JSON.parse(locationSettings);
-                document.getElementById('location-range').value = settings.range || 500;
-                document.getElementById('target-lat').value = settings.targetLat || '';
-                document.getElementById('target-lng').value = settings.targetLng || '';
-            }
+            const locationSettings = JSON.parse(localStorage.getItem('locationSettings') || '{}');
+            document.getElementById('location-range').value = locationSettings.range || 500;
+            document.getElementById('target-lat').value = locationSettings.targetLat || '';
+            document.getElementById('target-lng').value = locationSettings.targetLng || '';
             
             // 加载WiFi设置
-            const wifiSettings = localStorage.getItem('wifiSettings');
-            if (wifiSettings) {
-                const settings = JSON.parse(wifiSettings);
-                document.getElementById('wifi-name').value = settings.wifiName || '';
-                document.getElementById('wifi-bssid').value = settings.wifiBSSID || '';
-            }
+            const wifiSettings = JSON.parse(localStorage.getItem('wifiSettings') || '{}');
+            document.getElementById('wifi-name').value = wifiSettings.wifiName || '';
+            document.getElementById('wifi-bssid').value = wifiSettings.wifiBSSID || '';
             
             // 加载签到方式
-            const signinMethod = localStorage.getItem('signinMethod');
-            if (signinMethod) {
-                document.getElementById('signin-method').value = signinMethod;
+            const signinMethod = localStorage.getItem('signinMethod') || 'none';
+            document.getElementById('signin-method').value = signinMethod;
+        }
+        
+        // 获取活动设置
+        function getEventSettings() {
+            const defaultSettings = {
+                name: "教师培训活动",
+                date: "2023-10-15",
+                startTime: "09:00",
+                location: "柴桑区第二小学 多媒体教室"
+            };
+            
+            const saved = localStorage.getItem('eventSettings');
+            return saved ? JSON.parse(saved) : defaultSettings;
+        }
+        
+        // 更新活动显示
+        function updateEventDisplay(settings) {
+            document.getElementById('event-title').textContent = settings.name;
+            document.getElementById('event-time').textContent = formatDate(settings.date) + ' 上午' + (settings.startTime || "09:00");
+            document.getElementById('event-place').textContent = settings.location;
+        }
+        
+        // 获取签到数据
+        function getSignData() {
+            const saved = localStorage.getItem('signData');
+            return saved ? JSON.parse(saved) : [];
+        }
+        
+        // 保存签到数据
+        function saveSignData(record) {
+            const allData = getSignData();
+            allData.push(record);
+            localStorage.setItem('signData', JSON.stringify(allData));
+        }
+        
+        // 更新统计
+        function updateStats() {
+            const teacherList = localStorage.getItem('teacherList');
+            const teachers = teacherList ? teacherList.split('\n').filter(name => name.trim() !== '') : [];
+            const signData = getSignData();
+            const signedTeachers = [...new Set(signData.map(item => item.name))];
+            
+            document.getElementById('total-teachers').textContent = teachers.length;
+            document.getElementById('signed-teachers').textContent = signedTeachers.length;
+            const rate = teachers.length > 0 ? Math.round((signedTeachers.length / teachers.length) * 100) : 0;
+            document.getElementById('signin-rate').textContent = rate + '%';
+        }
+        
+        // 导出数据
+        function exportData() {
+            const signData = getSignData();
+            if (signData.length === 0) {
+                showResult('暂无签到数据', 'error');
+                return;
             }
             
-            // 更新统计数据
-            updateStats();
+            // 转换为CSV格式
+            let csv = '姓名,部门,签到时间,活动名称,活动日期,活动地点,签到方式\n';
+            signData.forEach(item => {
+                csv += `"${item.name}","${item.department}","${item.time}","${item.event}","${formatDate(item.date)}","${item.location}","${item.signinMethod}"\n`;
+            });
+            
+            const blob = new Blob(['\uFEFF' + csv], {type: 'text/csv;charset=utf-8;'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `柴桑二小签到记录_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showResult('签到数据已导出为CSV文件', 'success');
         }
         
         // 格式化日期
         function formatDate(dateString) {
             if (!dateString) return '';
             const date = new Date(dateString);
-            return date.getFullYear() + '年' + 
-                   (date.getMonth() + 1) + '月' + 
-                   date.getDate() + '日 上午9:00';
+            return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
         }
     </script>
 </body>
